@@ -1,7 +1,10 @@
 import './App.scss';
-import PostList from "./react/components/containers/PostList";
-import {useState} from "react";
+import PostList from "./react/sections/PostList";
+import {useMemo, useState} from "react";
 import PostForm from "./react/components/forms/PostForm/PostForm";
+import PostFilter from "./react/components/PostFilter";
+import CreatePostModal from "./react/popups/CreatePostModal/CreatePostModal";
+import DefaultButton from "./react/components/ui/buttons/DefaultButton";
 
 function App() {
 
@@ -11,8 +14,27 @@ function App() {
         {id: 3, title: 'Javascript 3', body: 'Desctiption'},
     ]);
 
+    const [filter, setFilter] = useState({
+        sort: '',
+        query: '',
+    });
+
+    const [modal, setModal] = useState(false);
+
+    const sortedPosts = useMemo(() => {
+        if (filter.sort) {
+            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
+        }
+        return posts;
+    }, [filter.sort, posts]);
+
+    const sortedAndSearchedPosts = useMemo(() => {
+        return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()));
+    }, [filter.query, sortedPosts]);
+
     const createPost = (newPost) => {
         setPosts([...posts, newPost]);
+        setModal(false);
     }
 
     const removePost = (post) => {
@@ -21,8 +43,16 @@ function App() {
 
     return (
         <div className="app">
-            <PostForm createPost={createPost} />
-            <PostList remove={removePost} posts={posts} title='Список постов 1'/>
+            <DefaultButton
+                btnText="Создать пользователя"
+                onClick={() => setModal(true)}
+            />
+            <CreatePostModal visible={modal} setVisible={setModal} >
+                <PostForm createPost={createPost} />
+            </CreatePostModal>
+            <hr/>
+            <PostFilter filter={filter} setFilter={setFilter} />
+            <PostList remove={removePost} posts={sortedAndSearchedPosts} title='Список постов'/>
         </div>
     );
 }

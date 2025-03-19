@@ -1,7 +1,14 @@
 import React from 'react';
-import PostItem from "../cards/Post/PostItem";
+import PostItem from "../components/cards/Post/PostItem";
 
 const PostList = ({posts, title, remove}) => {
+
+    if (!posts.length) {
+        return (
+            <h1>Посты не найдены</h1>
+        )
+    }
+
     return (
         <section>
             <h2 className="app__title">{title}</h2>
