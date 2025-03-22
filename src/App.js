@@ -1,26 +1,34 @@
 import './App.scss';
 import PostList from "./react/sections/PostList";
-import {useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import PostForm from "./react/components/forms/PostForm/PostForm";
 import PostFilter from "./react/components/PostFilter";
 import CreatePostModal from "./react/popups/CreatePostModal/CreatePostModal";
 import DefaultButton from "./react/components/ui/buttons/DefaultButton";
 import {usePosts} from "./scripts/hooks/usePost";
+import PostService from "./scripts/backend/API/PostService";
 
 function App() {
 
-    const [posts, setPosts] = useState([
-        {id: 1, title: 'Javascript 1', body: 'Desctiption'},
-        {id: 2, title: 'Javascript 2', body: 'Desctiption'},
-        {id: 3, title: 'Javascript 3', body: 'Desctiption'},
-    ]);
-
+    const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState({
         sort: '',
         query: '',
     });
     const [modal, setModal] = useState(false);
+    const [isPostLoading, setIsPostLoading] = useState(false);
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+
+    async function fetchPosts() {
+        setIsPostLoading(true);
+        const posts = await PostService.getAll();
+        setPosts(posts);
+        setIsPostLoading(false);
+    }
+
+    useEffect(() => {
+        fetchPosts();
+    }, []);
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost]);
@@ -42,7 +50,10 @@ function App() {
             </CreatePostModal>
             <hr/>
             <PostFilter filter={filter} setFilter={setFilter} />
-            <PostList remove={removePost} posts={sortedAndSearchedPosts} title='Список постов'/>
+            {isPostLoading
+                ? <h1>Идет загрузка...</h1>
+                : <PostList remove={removePost} posts={sortedAndSearchedPosts} title='Список постов'/>
+            }
         </div>
     );
 }
