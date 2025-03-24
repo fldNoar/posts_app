@@ -25,3 +25,26 @@ h1 {
 hr {
     margin: 15px 0;
 }
+
+.pagination__wrapper {
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination__btn {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid teal;
+    cursor: pointer;
+
+    &:last-child {
+        margin-right: 0px;
+    }
+
+    &--active {
+        border: 2px solid orange;
+        font-weight: bold;
+    }
+}
