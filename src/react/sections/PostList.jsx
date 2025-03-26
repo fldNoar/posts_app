@@ -1,5 +1,5 @@
 import React from 'react';
-import PostItem from "../components/cards/Post/PostItem";
+import PostItem from "../components/cards/PostItem/PostItem";
 
 const PostList = ({posts, title, remove}) => {
 
@@ -12,7 +12,7 @@ const PostList = ({posts, title, remove}) => {
     return (
         <section>
             <h2 className="app__title">{title}</h2>
-            {posts.map((post, index) => (
+            {posts.map(post => (
                 <PostItem remove={remove} number={post.id} key={post.id} post={post} />
             ))}
         </section>

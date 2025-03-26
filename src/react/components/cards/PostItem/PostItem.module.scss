@@ -1,0 +1,23 @@
+.post {
+    display: flex;
+    padding: 15px;
+    border: 2px solid teal;
+    margin-top: 15px;
+    justify-content: space-between;
+    align-items: center;
+
+    &Text {
+        max-width: 70%;
+    }
+    &Btns {
+        max-width: 30%;
+        display: flex;
+        justify-content: space-between;
+    }
+    &Btn {
+        margin-right: 10px;
+    }
+    &Btn:last-child {
+        margin-right: 0;
+    }
+}
