@@ -1,19 +1,18 @@
 import React from 'react';
 import {Route, Routes} from "react-router-dom";
-import Posts from "../pages/Posts";
-import About from "../pages/About";
-import NotFound from "../pages/NotFound";
-import Home from "../pages/Home";
-import PostIdPage from "../pages/PostIdPage";
+import {routes} from "../../constants/settings";
 
 const AppRouter = () => {
     return (
         <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route exact path="/posts" element={<Posts />} />
-            <Route path="/about" element={<About />} />
-            <Route exact path="/posts/:id" element={<PostIdPage />} />
-            <Route path="*" element={<NotFound />} />
+            {routes.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.path}
+                    element={route.element}
+                    exact={route.exact}
+                />
+            ))}
         </Routes>
     );
 };
